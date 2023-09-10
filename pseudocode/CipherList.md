@@ -42,10 +42,7 @@ CLASS CipherList
 
   PUBLIC PROCEDURE display()
     FOR I = 0 to (numOfCiphers - 1)
-      PRINT("Cipher Number " + I + " ----------------------------------" +
-            "Name: " + arrCipher[I].getName() +
-            "Plain Text: " + arrCipher[I].getPlainText() +
-            "Ciphered Text: " + arrCipher[I].getCipheredText())
+      PRINT((I+1) + ": " + arrCipher[I].getName())
     
     PRINT("--------------------------------------------------")
   ENDPROCEDURE
