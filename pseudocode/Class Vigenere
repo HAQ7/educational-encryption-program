@@ -1,0 +1,47 @@
+class Vigenere
+    private key
+    method encrypt(plainText)
+        plainText <- convertToLowercase(plainText)
+        ciphertext <- ""
+        alphabet <- "abcdefghijklmnopqrstuvwxyz"
+        keyIndex <- 0
+        
+        for i <- 0 to length of plainText
+            character <- getCharacterAtIndex(plainText, i)
+            
+            if isLetter(character) then
+                letterIndex <- find(character)
+                keywordIndex <- find(getCharacterAtIndex(key, keyIndex))
+                equals <- (letterIndex + keywordIndex) % 26
+                encryptedCharacter <- getCharacterAtIndex(alphabet, equals)
+                ciphertext <- concatenate(ciphertext, encryptedCharacter)
+                keyIndex <- (keyIndex + 1) % length of key
+            else
+                ciphertext <- concatenate(ciphertext, character)
+        
+        return ciphertext
+    
+    method decrypt(cypheredText)
+        cypheredText <- convertToLowercase(cypheredText)
+        decryptedText <- ""
+        alphabet <- "abcdefghijklmnopqrstuvwxyz"
+        keyIndex <- 0
+        
+        for i <- 0 to length of cypheredText
+            character <- getCharacterAtIndex(cypheredText, i)
+            
+            if isLetter(character) then
+                letterIndex <- find(character)
+                keywordIndex <- find(getCharacterAtIndex(key, keyIndex))
+                equals <- (letterIndex - keywordIndex + 26) % 26
+                decryptedCharacter <- getCharacterAtIndex(alphabet, equals)
+                decryptedText <- concatenate(decryptedText, decryptedCharacter)
+                keyIndex <- (keyIndex + 1) % length of key
+            else
+                decryptedText <- concatenate(decryptedText, character)
+        
+        return decryptedText
+    
+    private method find(letter)
+        alphabet <- "abcdefghijklmnopqrstuvwxyz"
+        return index of letter in alphabet
