@@ -1,4 +1,4 @@
-Class Vigenere
+Class Vigenere extends Cipher
     Private key
     
     Method encrypt(plainText)
