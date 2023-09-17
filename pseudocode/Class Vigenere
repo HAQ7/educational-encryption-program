@@ -1,4 +1,4 @@
-class Vigenere {
+class Vigenere extends Cipher {
     private key;
     
     method encrypt(plainText) {
