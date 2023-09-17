@@ -1,4 +1,4 @@
-class MonoSub {
+class MonoSub extends Cipher {
     private int key;
     
     method encrypt(plaintext) {
