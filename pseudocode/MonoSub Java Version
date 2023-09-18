@@ -1,0 +1,55 @@
+ public class MonoSub{
+    private int key;
+    public String encrypt(String plaintext) {
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        String letter;
+        plaintext=plaintext.toLowerCase();
+        for (int i = 0; i < plaintext.length(); i++) {
+            char character = plaintext.charAt(i);
+            char encryptedCharacter = moveLetter(character, key, alphabet,true);
+            letter += encryptedCharacter;
+        }        return letter;
+    }
+        
+        
+    public static String decrypt(String ciphertext, int key) {
+            String alphabet = "abcdefghijklmnopqrstuvwxyz";
+            String plaintext = "";
+            
+            for (int i = 0; i < ciphertext.length(); i++) {
+                char letter = ciphertext.charAt(i);
+                char decryptedCharacter = moveLetter(letter, key, alphabet,false);
+                plaintext += decryptedCharacter;
+            }
+            
+            return plaintext;}
+        
+        
+    
+    
+    public static char moveLetter(char letter, int key, String alphabet,boolean check) {
+       if (check == true) {
+    	   if (letter==' ')
+    		   return ' ';
+    	   int index = alphabet.indexOf(letter);
+           System.out.println(index);
+           int newIndex = (index + key);
+           if (newIndex > 26){
+           	newIndex=newIndex-26;
+           }
+           return alphabet.charAt(newIndex);
+       }
+       else  {
+    	   if (letter==' ')
+    		   return ' ';
+    	   int index = alphabet.indexOf(letter);
+           int newIndex = (index -key);
+           
+           if (newIndex < 0) {
+               newIndex += alphabet.length();
+           }
+           
+           return alphabet.charAt(newIndex);
+       }
+       }
+    }
