@@ -1,0 +1,49 @@
+public class Vigenere {
+	private String key;
+	public String encrypt(String plainText) {
+		plainText = plainText.toLowerCase();
+		String ciphertext = "";
+		String alphabet = "abcdefghijklmnopqrstuvwxyz";
+		int keyIndex = 0;
+		for (int i = 0; i < plainText.length(); i++) {
+			char character = plainText.charAt(i);
+			if (Character.isLetter(character)) {
+				int letterindex = find(character);
+				int keywordindex = find(key.charAt(keyIndex));
+				int equals = (letterindex + keywordindex) % 26;
+				char encryptedCharacter = alphabet.charAt(equals);
+				ciphertext += encryptedCharacter;
+				keyIndex = (keyIndex + 1) % key.length();
+			} else {
+				ciphertext += character;
+			}
+		}
+
+		return ciphertext;
+	}
+	public String decrypt(String CypheredText) {
+		CypheredText = CypheredText.toLowerCase();
+		String decryptedText = "";
+		String alphabet = "abcdefghijklmnopqrstuvwxyz";
+		int keyIndex = 0;
+		for (int i = 0; i < CypheredText.length(); i++) {
+			char letter = CypheredText.charAt(i);
+			if (Character.isLetter(letter)) {
+				int letterindex = find(letter);
+				int keywordindex = find(key.charAt(keyIndex));
+				int equals = (letterindex - keywordindex + 26) % 26;
+				char decryptedCharacter = alphabet.charAt(equals);
+				decryptedText += decryptedCharacter;
+				keyIndex = (keyIndex + 1) % key.length();
+			} else {
+				decryptedText += letter;
+			}
+		}
+		return decryptedText;
+	}
+	
+	private int find(char letter) {
+		String alphabet = "abcdefghijklmnopqrstuvwxyz";
+		return alphabet.indexOf(letter);
+	}
+	}
