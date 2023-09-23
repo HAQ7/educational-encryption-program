@@ -4,7 +4,7 @@ method encrypt()
     initialize splittedPlainText = split(textWithoutSpace)
     for each i in splittedPlainText length
         tempArray = splittedPlainText{i} to char array
-        int j = 0
+        initialize j = 0
         while (j != 2)
             int temp = tempArray{key{j} - 1}
             tempArray{key{j} - 1} = tempArray{j}
