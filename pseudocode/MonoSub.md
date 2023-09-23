@@ -2,9 +2,9 @@
         set encryptedText = ""
         
         for each i in the length of plainText
-            letter = get letter in plainText at i
-            encryptedLetter = moveLetter(letter, key, true)
-            set encryptedText = concatenate encryptedText and encryptedLetter
+            character = get character in plainText at i
+            encryptedCharacter = moveCharacter(character, key, true)
+            set encryptedText = concatenate encryptedText and encryptedCharacter
         
     
     
@@ -12,31 +12,31 @@
         plainText = ""
         
         for each i in the length of encryptedText 
-            letter = get letter in encryptedText at i
-            decryptedLetter = moveLetter(letter, key, false)
-            set plainText = concatenate plainText and decryptedLetter
+            character = get character in encryptedText at i
+            decryptedCharacter = moveCharacter(character, key, false)
+            set plainText = concatenate plainText and decryptedCharacter
         
         
     
     
-    method moveLetter(letter, key, check)
+    method moveCharacter(character, key, check)
         alphabet = "abcdefghijklmnopqrstuvwxyz"
         if check is true 
-            if letter is whitespace
+            if character is whitespace
                 return whitespace
-            index = get index in alphabet at letter
+            index = get index in alphabet at character
             newIndex = (index + key) % 26     
-            return letter in alphabet at newIndex
+            return character in alphabet at newIndex
          else 
-            if letter is whitespace
+            if character is whitespace
                 return whitespace
-            index = get index in alphabet at letter
+            index = get index in alphabet at character
             newIndex = (index - key)
             
             if newIndex < 0 
                 newIndex = newIndex + 26
             
-            return letter in alphabet at newIndex
+            return character in alphabet at newIndex
 
     
     
