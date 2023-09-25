@@ -5,12 +5,20 @@
         super(name);
     }
 
+    public void setKey(int key) {
+        this.key = key;
+    }
+
+    public int getKey() {
+        return key;
+    }
+
     public void encrypt() {
         encryptedText = "";
         for (int i = 0; i < plainText.length(); i++) {
-            char letter = plainText.charAt(i);
-            char encryptedLetter = moveLetter(letter, key,true);
-            encryptedText += encryptedLetter;
+            char character = plainText.charAt(i);
+            char encryptedCharacter = moveCharacter(character, key,true);
+            encryptedText += encryptedCharacter;
         }        
     }
         
@@ -18,29 +26,29 @@
     public void decrypt() {
             plainText = "";
             for (int i = 0; i < encryptedText.length(); i++) {
-                char letter = encryptedText.charAt(i);
-                char decryptedLetter = moveLetter(letter, key,false);
-                plainText += decryptedLetter;
+                char character = encryptedText.charAt(i);
+                char decryptedCharacter = moveCharacter(character, key,false);
+                plainText += decryptedCharacter;
             }
         }
         
         
     
     
-    public static char moveLetter(char letter, int key,boolean check) {
+    public static char moveCharacter(char character, int key,boolean check) {
         String alphabet = "abcdefghijklmnopqrstuvwxyz";
        if (check == true) {
-    	   if (letter==' ')
+    	   if (character==' ')
     		   return ' ';
-    	   int index = alphabet.indexOf(letter);
+    	   int index = alphabet.indexOf(character);
            int newIndex = (index + key) % 26;
            
            return alphabet.charAt(newIndex);
        }
        else  {
-    	   if (letter==' ')
+    	   if (character==' ')
     		   return ' ';
-    	   int index = alphabet.indexOf(letter);
+    	   int index = alphabet.indexOf(character);
            int newIndex = (index - key);
            
            if (newIndex < 0) {

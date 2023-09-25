@@ -26,7 +26,7 @@ public abstract class Cipher {
     }
 
     public void setPlainText(String plainText) {
-        this.plainText = plainText;
+        this.plainText = plainText.toLowerCase();
     }
 
     public String getPlainText() {
@@ -34,4 +34,5 @@ public abstract class Cipher {
     }
 
     public abstract void encrypt();
+    public abstract void decrypt();
 }

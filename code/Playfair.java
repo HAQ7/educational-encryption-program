@@ -1,18 +1,12 @@
-import java.util.Scanner;
-
-class Playfair
+class Playfair extends Cipher
 {  
-  private String plainText, encryptedText, name;
   private String [][] key = new String[5][5];
   private int numOfElements;
   private boolean overflowed;
 
-  public Playfair(String name, String plainText)
+  public Playfair(String name)
   {
-    this.name = name;
-    this.plainText = plainText;
-    numOfElements = 0;
-    overflowed = false;
+    super(name);
   }
 
   public void encrypt()

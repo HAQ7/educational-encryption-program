@@ -5,6 +5,14 @@ public class Vigenere extends Cipher {
 		super(name);
 	}
 
+	public void setKey(String key) {
+		this.key = key.toLowerCase();
+	}
+
+	public String getKey() {
+		return key;
+	}
+
 	public void encrypt() {
 		encryptedText = "";
 		String alphabet = "abcdefghijklmnopqrstuvwxyz";
