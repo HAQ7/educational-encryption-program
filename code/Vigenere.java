@@ -1,8 +1,11 @@
-public class Vigenere {
-	private String plainText;
-	private String encryptedText;
+public class Vigenere extends Cipher {
 	private String key;
-	public String encrypt() {
+
+	public Vigenere(String name) {
+		super(name);
+	}
+
+	public void encrypt() {
 		encryptedText = "";
 		String alphabet = "abcdefghijklmnopqrstuvwxyz";
 		int keyIndex = 0;
@@ -20,9 +23,8 @@ public class Vigenere {
 			}
 		}
 
-		return encryptedText;
 	}
-	public String decrypt() {
+	public void decrypt() {
 		plainText = "";
 		String alphabet = "abcdefghijklmnopqrstuvwxyz";
 		int keyIndex = 0;
@@ -39,7 +41,6 @@ public class Vigenere {
 				plainText += letter;
 			}
 		}
-		return plainText;
 	}
 	
 	private int find(char letter) {
