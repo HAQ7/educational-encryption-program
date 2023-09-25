@@ -1,26 +1,27 @@
- public class MonoSub{
-    private String plainText;
-	private String encryptedText;
+ public class MonoSub extends Cipher{
     private int key;
-    public String encrypt() {
+
+    public MonoSub(String name) {
+        super(name);
+    }
+
+    public void encrypt() {
         encryptedText = "";
         for (int i = 0; i < plainText.length(); i++) {
             char letter = plainText.charAt(i);
             char encryptedLetter = moveLetter(letter, key,true);
             encryptedText += encryptedLetter;
         }        
-        return encryptedText;
     }
         
         
-    public String decrypt() {
+    public void decrypt() {
             plainText = "";
             for (int i = 0; i < encryptedText.length(); i++) {
                 char letter = encryptedText.charAt(i);
                 char decryptedLetter = moveLetter(letter, key,false);
                 plainText += decryptedLetter;
             }
-            return plainText;
         }
         
         
