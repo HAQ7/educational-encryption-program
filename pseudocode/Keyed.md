@@ -6,7 +6,7 @@ method encrypt()
         tempArray = splittedPlainText{i} to char array
         initialize j = 0
         while (j != 2)
-            int temp = tempArray{key{j} - 1}
+            char temp = tempArray{key{j} - 1}
             tempArray{key{j} - 1} = tempArray{j}
             tempArray{j} = temp
             j = j + 1
@@ -16,15 +16,16 @@ method encrypt()
 
 method split(textWithoutSpace)
     initialize div = textWithoutSpace length / 4
+    initialize size = div
     if (plainText length % 4 != 0)
-        initialize size = div + 1
+        size = div + 1
     initialize array with length of size
     initialize count = 0
     initialize numOfElements = 0
     while(count != textWithoutSpace length - (plainText length - (div * 4)))
         count = count + 4
         array{numOfElements++} = textWithoutSpace substring from count - 4 to count
-    while(plainText substring from count != 4)
+    while(plainText substring from count length != 4)
         textWithoutSpace = concatenate textWithoutSpace and z
     array{numOfElements} = textWithoutSpace substring from count
     return array
