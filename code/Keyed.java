@@ -1,4 +1,4 @@
-// Not complete
+// Not tested yet
 
 public class Keyed {
 	private int[] key;
@@ -44,7 +44,7 @@ public class Keyed {
 			count = count + 4;
 			array[numOfElements++] = textWithoutSpace.substring(count - 4, count);
 
-			while (plainText.substring(count) != 4) {
+			while (plainText.substring(count).length() != 4) {
 				textWithoutSpace = textWithoutSpace.concat("z");
 			}
 			array[numOfElements] = textWithoutSpace.substring(count);
