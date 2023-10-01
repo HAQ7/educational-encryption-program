@@ -1,20 +1,19 @@
-// Not tested yet
-
 public class Keyed {
-	private int[] key;
+	private int[] key = { 3, 4, 1, 2 }; // for testing
 	private int numOfElements;
 
 	// they should be inherited from class Cipher
-	private String plainText;
+	private String plainText = "Where are you now"; // for testing
 	private String encryptedText;
-
-	public Keyed(String name, String plainText) {
-		// super constructor
-	}
 
 	public String encrypt() {
 		encryptedText = "";
 		String textWithoutSpace = plainText.replace(" ", "");
+
+		while (textWithoutSpace.length() % 4 != 0) {
+			textWithoutSpace = textWithoutSpace.concat("z");
+		}
+
 		String[] splittedPlainText = split(textWithoutSpace);
 		for (int i = 0; i < splittedPlainText.length; i++) {
 			char[] tempArray = splittedPlainText[i].toCharArray();
@@ -29,27 +28,34 @@ public class Keyed {
 		}
 		for (int i = 0; i < splittedPlainText.length; i++)
 			encryptedText = encryptedText.concat(splittedPlainText[i]);
-		return encryptedText;
+		return encryptedText.toUpperCase(); // ERWHREEAUNYOZZOW  (for Testing)
 	}
 
-	public string[] split(String textWithoutSpace) {
+	public String[] split(String textWithoutSpace) {
 		int div = textWithoutSpace.length() / 4;
-		int size = div;
-		if (plainText.length() % 4 != 0)
-			size = div + 1;
-		String[] array = new String[size];
+//		int size = div;
+//		if (plainText.length() % 4 != 0)
+//			size = div + 1;
+//		String[] array = new String[size]; 
+		String[] array = new String[div];
 		int count = 0;
 		numOfElements = 0;
-		while (count != textWithoutSpace.length() - (plainText.length() - (div * 4))) {
+
+//		while (count != textWithoutSpace.length() - (plainText.length() - (div * 4))) {
+
+		while (count < textWithoutSpace.length()) {
 			count = count + 4;
+
 			array[numOfElements++] = textWithoutSpace.substring(count - 4, count);
 
-			while (plainText.substring(count).length() != 4) {
-				textWithoutSpace = textWithoutSpace.concat("z");
-			}
-			array[numOfElements] = textWithoutSpace.substring(count);
-			return array;
+//			while (plainText.substring(count).length() != 4) {
+//				textWithoutSpace = textWithoutSpace.concat("z");
+//			}
+
+//			array[numOfElements] = textWithoutSpace.substring(count);
+//			return array;
 		}
+		return array;
 	}
 
 }
