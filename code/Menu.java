@@ -46,14 +46,14 @@ public class Menu {
         return tempText;
     }
     public static void decChoice(CipherList list, Scanner in) {
-        int encChoice;
+        int decChoice;
             do {
                 
-                encChoice = in.nextInt();
+                decChoice = in.nextInt();
                 in.nextLine();
                 System.out.print("Enter a name for the cipher: ");
                 String name = in.nextLine();
-                if (encChoice == 1) {
+                if (decChoice == 1) {
                     MonoSub monoSubCipher = new MonoSub(name);
                     System.out.println("In Monoalphabetic Substitution, the key is the number of shifts that will ocour to each letter.");
                     System.out.print("Enter the key to start the process: ");
@@ -71,25 +71,40 @@ public class Menu {
                     monoSubCipher.decrypt();
                     System.out.println(monoSubCipher.getPlainText());
                     list.saveChoice(monoSubCipher, in);
-                } else if (encChoice == 2) {
-                    
-                } else if (encChoice == 3) {
+                } else if (decChoice == 2) {
+                    Playfair playfairCipher = new Playfair(name);
+                    System.out.println("In playfair, a matrix that consist of all the letters will be used to encrypt. \n" +
+                    "We will take 2 letters each time if the 2 letters are in the same row each letter will be moved 1 cell to the right. \n" +
+                    "If the 2 letters are in the same column we will move each letter 1 cell down \n" +
+                    "If neither of them are togther then the first will be moved to the sec's column, and the sec will be moved to the first's col");
+                    System.out.println("The matrix fill process will start now, keep in mind that in one of the cells you need to enter ij togther.");
+                    System.out.println("You will also need to enter all of the letters in the english language.");
+                    for(int i = 0; i<25; i++) {
+                        System.out.print("Enter a letter: ");
+                        while(!playfairCipher.add(textValidate(in.nextLine(),in)));
+                    }
+                    System.out.print("Enter the text to be decrypted: ");
+                    playfairCipher.setEncryptedText(textValidate(in.nextLine(),in));
+                    playfairCipher.decrypt();
+                    System.out.println(playfairCipher.getPlainText());
+                    list.saveChoice(playfairCipher, in);
+                } else if (decChoice == 3) {
                     Vigenere vigenereCipher = new Vigenere(name);
                     System.out.println("In Vigenere, the concept of polyalphabetic is used here, where we use a String as a key.");
                     System.out.print("Enter the key to start the process: ");
-                    vigenereCipher.setKey(in.nextLine());
+                    vigenereCipher.setKey(textValidate(in.nextLine(),in));
                     System.out.print("Enter the text to be decrypted: ");
                     vigenereCipher.setEncryptedText(textValidate(in.nextLine(),in));
                     vigenereCipher.decrypt();
                     System.out.println(vigenereCipher.getPlainText());
                     list.saveChoice(vigenereCipher, in);
                     
-                } else if (encChoice == 4) {
+                } else if (decChoice == 4) {
                     
                 }
                 
                 
-            } while ((encChoice > 4 || encChoice < 1 ));
+            } while ((decChoice > 4 || decChoice < 1 ));
         }
         
         public static void encChoice(CipherList list, Scanner in, boolean calledFromSaved, String savedText) {
@@ -105,11 +120,13 @@ public class Menu {
                     tempText = savedText;
                     calledFromSaved = false;
                 } else {
-                    displayCipherOptions(1);
+                    displayCipherOptions(1, list);
                     encChoice = in.nextInt();
                     in.nextLine();
-                    System.out.print("Enter a name for the cipher: ");
-                    name = in.nextLine();
+                    if (encChoice != 6) {
+                        System.out.print("Enter a name for the cipher: ");
+                        name = in.nextLine();
+                    }
                 }
                 if (encChoice == 1) {
                     MonoSub monoSubCipher = new MonoSub(name);
@@ -127,18 +144,61 @@ public class Menu {
                     tempText = createCipher(list, monoSubCipher, name, tempText, in);
                     hasEncrypted = true;
                 } else if (encChoice == 2) {
-                    // playfair here
+                    Playfair playfairCipher = new Playfair(name);
+                    System.out.println("In playfair, a matrix that consist of all the letters will be used to encrypt. \n" +
+                    "We will take 2 letters each time if the 2 letters are in the same row each letter will be moved 1 cell to the right. \n" +
+                    "If the 2 letters are in the same column we will move each letter 1 cell down \n" +
+                    "If neither of them are togther then the first will be moved to the sec's column, and the sec will be moved to the first's col");
+                    System.out.println("The matrix fill process will start now, keep in mind that in one of the cells you need to enter ij togther.");
+                    System.out.println("You will also need to enter all of the letters in the english language.");
+                    for(int i = 0; i<25; i++) {
+                        System.out.print("Enter a letter: ");
+                        while(!playfairCipher.add(textValidate(in.nextLine(),in)));
+                    }
+                    tempText = createCipher(list, playfairCipher, name, tempText, in);
+                    hasEncrypted = true;
                 } else if (encChoice == 3) {
                     Vigenere vigenereCipher = new Vigenere(name);
                     System.out.println("In Vigenere, the concept of polyalphabetic is used here, where we use a String as a key.");
                     System.out.print("Enter the key to start the process: ");
-                    vigenereCipher.setKey(in.nextLine());
+                    vigenereCipher.setKey(textValidate(in.nextLine(),in));
                     tempText = createCipher(list, vigenereCipher, name, tempText, in);
                     hasEncrypted = true;
                 } else if (encChoice == 4) {
-                    // keyed here
+                    Keyed keyedCipher = new Keyed(name);
+                    System.out.println("In Keyed, each 4 letters in the sentence will be split into a group and using your key they will be permute with each other..");
+                    System.out.print("now please enter the 4 numbers from 1 to 4 while not entering the same number again: ");
+                    for(int i = 0; i<4; i++) {
+                        keyedCipher.add(in.nextInt(), in);
+                    }
+                    in.nextLine();
+                    tempText = createCipher(list, keyedCipher, name, tempText, in);
+                    hasEncrypted = true;
                 } else if (encChoice == 5) {
                     // des here
+                } else if (encChoice == 6 && !list.isEmpty()) {
+                     int choice;
+                    do {
+                        System.out.println("Choose the cipher");
+                        System.out.println("-------------------------------------");
+                        list.display();
+                        System.out.println("-------------------------------------");
+                        System.out.print("Enter here: ");
+                        choice = in.nextInt();
+                        in.nextLine();
+                    } while(!list.isChoiceAval(choice));
+                    Cipher savedCipher = list.getCipher(choice);
+                    if (tempText.length() > 0) {
+                        savedCipher.setPlainText(tempText);
+                    }else {
+                        System.out.print("Enter the text to be Encrypted: ");
+                        savedCipher.setPlainText(textValidate(in.nextLine(),in));
+                    }
+                    savedCipher.encrypt();
+                    tempText = savedCipher.getEncryptedText();
+                    System.out.println(tempText);
+                    hasEncrypted = true;
+                    
                 }
                 if (hasEncrypted) {
                     do {
@@ -152,10 +212,10 @@ public class Menu {
                     } while (againChoice > 2 || againChoice < 1);
                 }
 
-            } while (((encChoice > 5 && encChoice != 10 )|| encChoice < 1 ) || againChoice == 1);
+            } while (((encChoice > 6 && encChoice != 10 )|| encChoice < 1 ) || againChoice == 1);
     }
-    public static void displayCipherOptions(int mainChoice) {
-
+    public static void displayCipherOptions(int mainChoice, CipherList list) {
+        
         System.out.println("Please select an option");
         System.out.println("-------------------------------------");
         System.out.println("1- Monoalphabetic Substitution");
@@ -164,6 +224,9 @@ public class Menu {
         if (mainChoice == 1) {
             System.out.println("4- Keyed Transposition");
             System.out.println("5- DES");
+            if (!list.isEmpty()) {
+                   System.out.println("6- Saved Encryption method");
+               }
         }
         if (mainChoice == 2) {
             System.out.println("4- Frequency Analysis");
@@ -197,12 +260,12 @@ public class Menu {
             if (mainChoice == 1) {
                encChoice(list, in, false, "");
             }
-            if (mainChoice == 2) {
-                displayCipherOptions(mainChoice);
+            else if (mainChoice == 2) {
+                displayCipherOptions(mainChoice, list);
                 decChoice(list, in);
             }
 
-            if (mainChoice == 3 && !list.isEmpty()) {
+            else if (mainChoice == 3 && !list.isEmpty()) {
                 int saveChoice = 0;
                 do {
                     System.out.println("Would you like to ");
@@ -252,7 +315,6 @@ public class Menu {
 
                         }
                         // else if (list.getCipher(choice) instanceof Keyed || list.getCipher(choice) instanceof DES)
-                        //else if (list.getCipher(choice) instanceof Freq)
                     } else if (saveChoice == 2) {
                         list.remove(choice);
                     }
@@ -260,11 +322,11 @@ public class Menu {
                 
             }
 
-            if (mainChoice == 3 && list.isEmpty()) {
+            else if (mainChoice == 3 && list.isEmpty()) {
                 break;
             }
 
-            if (mainChoice == 4 && !list.isEmpty()) {
+            else if (mainChoice == 4 && !list.isEmpty()) {
                 break;
             }
 

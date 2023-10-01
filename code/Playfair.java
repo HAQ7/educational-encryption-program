@@ -45,16 +45,14 @@ class Playfair extends Cipher
 
       while (true)
       {
-        if (key[countR][countC].length() == 2)
+        if (key[countR][countC].length() == 2 && ((key[countR][countC].charAt(0) == firstLetter) || (key[countR][countC].charAt(1) == firstLetter)))
         {
-          if ((key[countR][countC].charAt(0) == firstLetter) || (key[countR][countC].charAt(1) == firstLetter))
-          {
             firstR = countR;
             firstC = countC;
             countR = 0;
             countC = 0;
             break;
-          }
+        
         }
 
         else if ((key[countR][countC].charAt(0) == firstLetter))
@@ -263,10 +261,12 @@ class Playfair extends Cipher
         countC = 0;
       }
 
-      if (key[countR][countC].length() == 2)
+      if (key[countR][countC].length() == 2) {
         if ((key[countR][countC].charAt(0) == Character.toUpperCase(letter)) || (key[countR][countC].charAt(1) == Character.toUpperCase(letter))) return true;
-      
-      else if (key[countR][countC].charAt(0) == Character.toUpperCase(letter)) return true;
+      }
+      else if (key[countR][countC].charAt(0) == Character.toUpperCase(letter)) {
+        return true;
+      } 
     }
     
     return false;
@@ -274,25 +274,44 @@ class Playfair extends Cipher
 
   public boolean add(String letter)
   {
-    if (letter.length() == 1 &&exist(letter.charAt(0))) return false;
-    if (letter.length() == 2 &&exist(letter.charAt(0))) return false;
-    else if (letter.length() == 2 &&exist(letter.charAt(1))) return false;
+    if (letter.length() == 1 &&exist(letter.charAt(0))) {
+      System.out.print("please enter ij or a single letter you have not entered before: ");  
+      return false;
+    } 
+    if (letter.length() == 2 &&exist(letter.charAt(0))){
+      System.out.print("please enter ij or a single letter you have not entered before: ");      
+      return false;
+    } 
+    else if (letter.length() == 2 &&exist(letter.charAt(1))){
+      System.out.print("please enter ij or a single letter you have not entered before: ");
+      return false;
+    }
 
     if (numOfElements<25 &&letter.length() == 1)
     {
-      key[(int) numOfElements/5][numOfElements%5] = letter.toUpperCase();
-      numOfElements++;
-      return true;
+      if (letter.equals("i") || letter.equals("j")) {
+
+        System.out.print("please only enter i or j together a single letter you have not entered before:");
+        return false;
+      }
+      else {
+        key[(int) numOfElements/5][numOfElements%5] = letter.toUpperCase();
+        numOfElements++;
+        return true;
+      }
     }
 
-    else if (numOfElements<25 &&letter.length() == 2 &&!overflowed)
+    else if (numOfElements<25 &&letter.length() == 2 &&!overflowed && letter.charAt(0) ==  'i')
     {
       key[(int) numOfElements/5][numOfElements%5] = letter.toUpperCase();
       numOfElements++;
       return overflowed = true;
        
     }
-
-    else return false;
+    
+    else {
+      System.out.print("please enter ij or a single letter you have not entered before: ");
+      return false;
+    } 
   }
 }

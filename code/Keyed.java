@@ -1,12 +1,30 @@
-public class Keyed {
-	private int[] key = { 3, 4, 1, 2 }; // for testing
+import java.util.Scanner;
+
+public class Keyed extends Cipher {
+	private int[] key = new int[4];
+	private int digitsInKey = 0;
 	private int numOfElements;
 
-	// they should be inherited from class Cipher
-	private String plainText = "Where are you now"; // for testing
-	private String encryptedText;
+	public Keyed(String name) {
+		super(name);
+	}
 
-	public String encrypt() {
+	public boolean exist(int digit) {
+		for (int i = 0; i < key.length; i++) {
+			if (key[i] == digit)
+				return true;
+		} return false;
+	}
+
+	public void add(int digit, Scanner in) {
+		while (exist(digit) || (digit > 4 || digit < 1)) {
+			System.out.print("please enter a number from 1 to 4 that you have not entered before: ");
+			digit = in.nextInt();
+		}
+		key[digitsInKey++] = digit;
+	}
+
+	public void encrypt() {
 		encryptedText = "";
 		String textWithoutSpace = plainText.replace(" ", "");
 
@@ -28,7 +46,7 @@ public class Keyed {
 		}
 		for (int i = 0; i < splittedPlainText.length; i++)
 			encryptedText = encryptedText.concat(splittedPlainText[i]);
-		return encryptedText.toUpperCase(); // ERWHREEAUNYOZZOW  (for Testing)
+		 // ERWHREEAUNYOZZOW  (for Testing)
 	}
 
 	public String[] split(String textWithoutSpace) {

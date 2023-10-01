@@ -34,5 +34,7 @@ public abstract class Cipher {
     }
 
     public abstract void encrypt();
-    public abstract void decrypt();
+    public void decrypt() {
+        
+    }
 }

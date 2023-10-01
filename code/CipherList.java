@@ -34,9 +34,11 @@ public class CipherList {
     }
     public void display() {
         for (int i = 0; i < numOfCiphers; i++) {
+
             System.out.println((i + 1) + "- " + arrCiphers[i].getName());
         }
     }
+
 
     public boolean isChoiceAval(int index) {
         if(index > 0 && index < numOfCiphers + 1)
