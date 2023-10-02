@@ -1,5 +1,3 @@
-import java.security.Key;
-
 class Playfair extends Cipher
 {  
   private String [][] key = new String[5][5];
