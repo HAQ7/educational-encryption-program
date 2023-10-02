@@ -15,6 +15,7 @@ class Playfair extends Cipher
         System.out.print("|" + key[i][j] + "|");
       }
     }
+    System.out.println();
     System.out.println("---------------");
   }
 
