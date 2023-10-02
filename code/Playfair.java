@@ -1,3 +1,5 @@
+import java.security.Key;
+
 class Playfair extends Cipher
 {  
   private String [][] key = new String[5][5];
@@ -8,9 +10,20 @@ class Playfair extends Cipher
   {
     super(name);
   }
+  public void displayKey() {
+    for(int i = 0; i < 5; i++) {
+      System.out.println("\n---------------");
+      for(int j = 0; j < 5; j++) {
+        System.out.print("|" + key[i][j] + "|");
+      }
+    }
+    System.out.println("---------------");
+  }
 
   public void encrypt()
   {
+    displayKey();
+    System.out.println("\n----------------------------------------------");
     String copyText = encryptedText = "";
     int count = 0;
     int countR = 0;
@@ -128,6 +141,7 @@ class Playfair extends Cipher
         else temp2++;
 
         encryptedText = encryptedText.concat("" + key[firstR][temp1].charAt(0) + key[secondR][temp2].charAt(0));
+        System.out.println(key[firstR][firstC].charAt(0) + " and " + key[secondR][secondC].charAt(0) + " are on the same row so they become: " + key[firstR][temp1].charAt(0) + " and " + key[secondR][temp2].charAt(0));
       }
 
       else if (firstC == secondC)
@@ -144,17 +158,25 @@ class Playfair extends Cipher
         else temp2++;
 
         encryptedText = encryptedText.concat("" + key[temp1][firstC].charAt(0) + key[temp2][secondC].charAt(0));
+        System.out.println(key[firstR][firstC].charAt(0) + " and " + key[secondR][secondC].charAt(0) + " are on the same column so they become: " + key[temp1][firstC].charAt(0) + " and " + key[temp2][secondC].charAt(0));
       }
 
       else
       {
         encryptedText = encryptedText.concat("" + key[firstR][secondC].charAt(0) + key[secondR][firstC].charAt(0));
+        System.out.println(key[firstR][firstC].charAt(0) + " and " + key[secondR][secondC].charAt(0) + " are on diffrent row and column so they become: " + key[firstR][secondC].charAt(0) + " and " + key[secondR][firstC].charAt(0));
       }
     }
+    System.out.println("\n----------------------------------------------");
+    System.out.println("Final output: " + encryptedText);
   }
 
   public void decrypt()
   {
+    displayKey();
+    System.out.println("----------------------------------------------");
+    System.out.println("since we are decrypting we will reverse anything we do, (instead of going up go down, and so on....)");
+    System.out.println("and remove any x between any two of the same letter and remove any z at the end of sequence");
     String copyText = "";
     int count = 0;
     int countR = 0;
@@ -225,6 +247,7 @@ class Playfair extends Cipher
         else temp2--;
 
         copyText = copyText.concat(key[firstR][temp1] + key[secondR][temp2]);
+        System.out.println(key[firstR][firstC].charAt(0) + " and " + key[secondR][secondC].charAt(0) + " are on the same row so they become: " + key[firstR][temp1].charAt(0) + " and " + key[secondR][temp2].charAt(0));
       }
 
       else if (firstC == secondC)
@@ -241,14 +264,18 @@ class Playfair extends Cipher
         else temp2--;
 
         copyText = copyText.concat(key[temp1][firstC] + key[temp2][secondC]);
+        System.out.println(key[firstR][firstC].charAt(0) + " and " + key[secondR][secondC].charAt(0) + " are on the same column so they become: " + key[temp1][firstC].charAt(0) + " and " + key[temp2][secondC].charAt(0));
       }
 
       else
       {
         copyText = copyText.concat(key[firstR][secondC] + key[secondR][firstC]);
+        System.out.println(key[firstR][firstC].charAt(0) + " and " + key[secondR][secondC].charAt(0) + " are on diffrent row and column so they become: " + key[firstR][secondC].charAt(0) + " and " + key[secondR][firstC].charAt(0));
       }
     }
     plainText = copyText;
+    System.out.println("----------------------------------------------");
+    System.out.println("Final output: " + plainText);
   }
 
   private boolean exist(char letter)

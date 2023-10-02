@@ -1,7 +1,7 @@
 method decrypt()
-    plainText = encryptedText without space
+    initialize plainText = encryptedText without space
     createFreqMatrixOfText()
-    sortFreqMatrixOfText()
+    
     plainText replace all freqMatrixOfText row 0 col 0 to e
     plainText replace all freqMatrixOfText row 1 col 0 to t
     plainText replace all freqMatrixOfText row 2 col 0 to a
@@ -10,7 +10,7 @@ method decrypt()
 
 
 method createFreqMatrixOfText()
-   uniqueCharacters = ""
+   initialize uniqueCharacters = ""
    for each character in encryptedText
         if(uniqueCharacters does not contain character)
             uniqueCharacters = concatenate uniqueCharacters and character
@@ -22,6 +22,7 @@ method createFreqMatrixOfText()
             if character at index i in uniqueCharacters == character at index j in encryptedText
                 count = count + 1
         freqMatrixOfText row i and col 1 = freqMatrixOfText row i and col 1 + count
+    sortFreqMatrixOfText(uniqueCharacters's length)
 
 
 method sortFreqMatrixOfText()

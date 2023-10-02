@@ -24,6 +24,13 @@ public class Keyed extends Cipher {
 		key[digitsInKey++] = digit;
 	}
 
+	public void display(String[] arr) {
+		for (int i = 0; i < arr.length; i++) {
+			System.out.print("-" + arr[i] + "-");
+		}
+		System.out.println();
+	}
+
 	public void encrypt() {
 		encryptedText = "";
 		String textWithoutSpace = plainText.replace(" ", "");
@@ -33,7 +40,11 @@ public class Keyed extends Cipher {
 		}
 
 		String[] splittedPlainText = split(textWithoutSpace);
+		System.out.println("Split each 4 letters into a group as follows: ");
+		display(splittedPlainText);
+		System.out.println("and we permute each group with the key sequence");
 		for (int i = 0; i < splittedPlainText.length; i++) {
+			System.out.print("so the group: " + splittedPlainText[i]);
 			char[] tempArray = splittedPlainText[i].toCharArray();
 			int j = 0;
 			while (j != 2) {
@@ -43,35 +54,23 @@ public class Keyed extends Cipher {
 				j++;
 			}
 			splittedPlainText[i] = "" + tempArray[0] + tempArray[1] + tempArray[2] + tempArray[3];
+			System.out.println(" becomes: " + splittedPlainText[i]);
 		}
 		for (int i = 0; i < splittedPlainText.length; i++)
 			encryptedText = encryptedText.concat(splittedPlainText[i]);
-		 // ERWHREEAUNYOZZOW  (for Testing)
 	}
 
 	public String[] split(String textWithoutSpace) {
 		int div = textWithoutSpace.length() / 4;
-//		int size = div;
-//		if (plainText.length() % 4 != 0)
-//			size = div + 1;
-//		String[] array = new String[size]; 
 		String[] array = new String[div];
 		int count = 0;
 		numOfElements = 0;
 
-//		while (count != textWithoutSpace.length() - (plainText.length() - (div * 4))) {
 
 		while (count < textWithoutSpace.length()) {
 			count = count + 4;
 
 			array[numOfElements++] = textWithoutSpace.substring(count - 4, count);
-
-//			while (plainText.substring(count).length() != 4) {
-//				textWithoutSpace = textWithoutSpace.concat("z");
-//			}
-
-//			array[numOfElements] = textWithoutSpace.substring(count);
-//			return array;
 		}
 		return array;
 	}

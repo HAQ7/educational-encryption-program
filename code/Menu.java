@@ -41,7 +41,6 @@ public class Menu {
         } 
         cipher.encrypt();
         tempText = cipher.getEncryptedText();
-        System.out.println(tempText);
         list.saveChoice(cipher,in);
         return tempText;
     }
@@ -51,8 +50,11 @@ public class Menu {
                 
                 decChoice = in.nextInt();
                 in.nextLine();
-                System.out.print("Enter a name for the cipher: ");
-                String name = in.nextLine();
+                String name = "";
+                if (decChoice != 4) {
+                    System.out.print("Enter a name for the cipher: ");
+                    name = in.nextLine();
+                }
                 if (decChoice == 1) {
                     MonoSub monoSubCipher = new MonoSub(name);
                     System.out.println("In Monoalphabetic Substitution, the key is the number of shifts that will ocour to each letter.");
@@ -69,7 +71,6 @@ public class Menu {
                     System.out.print("Enter the text to be decrypted: ");
                     monoSubCipher.setEncryptedText(textValidate(in.nextLine(),in));
                     monoSubCipher.decrypt();
-                    System.out.println(monoSubCipher.getPlainText());
                     list.saveChoice(monoSubCipher, in);
                 } else if (decChoice == 2) {
                     Playfair playfairCipher = new Playfair(name);
@@ -100,7 +101,11 @@ public class Menu {
                     list.saveChoice(vigenereCipher, in);
                     
                 } else if (decChoice == 4) {
-                    
+                    FreqAnalysis freqAnalysis = new FreqAnalysis();
+                    System.out.println("In Frequency Analysis, since we dont know the key, we will have to use the frequency of the letters in the sentence and compare them to their frequency in the english language");
+                    System.out.print("Enter the text to be decrypted: ");
+                    freqAnalysis.setEncryptedText(textValidate(in.nextLine(),in));
+                    freqAnalysis.decrypt();
                 }
                 
                 
