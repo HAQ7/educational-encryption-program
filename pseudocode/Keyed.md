@@ -1,9 +1,11 @@
 method encrypt()
     encryptedText = ""
     initialize  textWithoutSpace = plainText without space
+    while (textWithoutSpace length % 4 != 0)
+        textWithoutSpace = concatenate textWithoutSpace and z
     initialize splittedPlainText = split(textWithoutSpace)
     for each i in splittedPlainText length
-        tempArray = splittedPlainText{i} to char array
+        initialize tempArray = splittedPlainText{i} to char array
         initialize j = 0
         while (j != 2)
             char temp = tempArray{key{j} - 1}
@@ -16,17 +18,11 @@ method encrypt()
 
 method split(textWithoutSpace)
     initialize div = textWithoutSpace length / 4
-    initialize size = div
-    if (plainText length % 4 != 0)
-        size = div + 1
-    initialize array with length of size
+    initialize array with length of div
     initialize count = 0
     initialize numOfElements = 0
-    while(count != textWithoutSpace length - (plainText length - (div * 4)))
+    while(count < textWithoutSpace length)
         count = count + 4
         array{numOfElements++} = textWithoutSpace substring from count - 4 to count
-    while(plainText substring from count length != 4)
-        textWithoutSpace = concatenate textWithoutSpace and z
-    array{numOfElements} = textWithoutSpace substring from count
     return array
     
