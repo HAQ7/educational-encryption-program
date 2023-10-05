@@ -74,6 +74,7 @@ public class DES extends Cipher {
      * Input Permutation.  The message block is permuted by this
      * permutation at the beginning of the algorithm.
      */
+    private String key;
     private static final byte[] IP = {
             58, 50, 42, 34, 26, 18, 10, 2,
             60, 52, 44, 36, 28, 20, 12, 4,
@@ -606,13 +607,14 @@ public class DES extends Cipher {
 		return hex.toString();
 	 }
 
-    public DES(String name) {
+    public DES(String name, String key) {
         super(name);
+        this.key = key;
     }
+    
 
     public void encrypt() {
     	String oriText = plainText;
-    	String key = convertStringToHex("mypass");
     	byte[] keys = parseBytes(key);
     	byte[] test = parseBytes(oriText);
     	

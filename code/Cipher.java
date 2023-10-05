@@ -1,4 +1,6 @@
-public abstract class Cipher {
+import java.io.Serializable;
+
+public abstract class Cipher implements Serializable {
     private String name;
     protected String plainText;
     protected String encryptedText;

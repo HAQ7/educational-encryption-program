@@ -1,3 +1,8 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 public class CipherList {
@@ -25,6 +30,10 @@ public class CipherList {
         } while(saveChoice > 2 || saveChoice < 1);
     }
     public void remove(int index) {
+        if(isFull()) {
+            numOfCiphers--;
+            return;
+        }
         index--;
         do {
             arrCiphers[index] = arrCiphers[++index];
@@ -51,11 +60,47 @@ public class CipherList {
     public boolean isEmpty() {
         return numOfCiphers == 0;
     }
-     public boolean isFull() {
+
+    public boolean isFull() {
         return numOfCiphers == 5;
     }
 
     public Cipher getCipher(int index) {
         return arrCiphers[--index];
+    }
+
+    public void getFile() {
+        try{
+            FileInputStream fis = new FileInputStream("encryptList.encl");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            try {
+                int i =0;
+                while (true) {
+                    Cipher newCipher = (Cipher) ois.readObject();
+                    if (newCipher != null)
+                        add(newCipher);
+                    
+                }
+            } catch (Exception e) {
+                
+            }
+            ois.close();
+        }
+        catch (IOException e) {  
+        }
+    }
+
+    public void saveFile() {
+        try{
+
+            FileOutputStream fos = new FileOutputStream("encryptList.encl");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            for (int i = 0; i<numOfCiphers; i++) {
+                oos.writeObject(arrCiphers[i]);
+            }
+            oos.close();
+        }
+        catch (Exception e) {
+        }
     }
 }

@@ -1,3 +1,7 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 public class Menu {
     public static String textValidate(String text, Scanner in) {
@@ -33,7 +37,7 @@ public class Menu {
     }
 
     public static String createCipher(CipherList list, Cipher cipher, String name, String tempText, Scanner in) {
-        if (tempText.length() > 0) 
+        if (!tempText.isEmpty())
         cipher.setPlainText(tempText);
         else {
             System.out.print("Enter the text to be Encrypted: ");
@@ -180,7 +184,38 @@ public class Menu {
                     tempText = createCipher(list, keyedCipher, name, tempText, in);
                     hasEncrypted = true;
                 } else if (encChoice == 5) {
-                    // des here
+                    System.out.println("DES takes a 16 hexadecimal numbers to genarate the keys.");
+                    Boolean isItAllowed;
+                    System.out.print("Enter the key of 16 hexadecimal numbers (without space) to start the process: ");
+                    String key;
+                    do {
+                        key = in.nextLine();
+                        isItAllowed = true;
+                        for (int i = 0; i < key.length(); i++) {
+                            if ("qwrtyuiopsghjklzxvnm `!@#$%^&*()_+{}\\|;:'\'\",<.>/?".contains("" + key.charAt(i)) || key.length() != 16) {
+                                isItAllowed = false;
+                                System.out.print("please 16 hexadecimal numbers enter again without space: ");
+                                break;
+                            }
+                        }
+                    } while(!isItAllowed);
+                    System.out.print("Enter the text of 16 hexadecimal numbers (without space) that you want to be encrypted: ");
+                    if (!(tempText.length() > 0)) {
+                        do {
+                        tempText = in.nextLine();
+                        isItAllowed = true;
+                        for (int i = 0; i < key.length(); i++) {
+                            if ("qwrtyuiopsghjklzxvnm `!@#$%^&*()_+{}\\|;:'\'\",<.>/?".contains("" + tempText.charAt(i)) || key.length() != 16) {
+                                isItAllowed = false;
+                                System.out.print("please 16 hexadecimal numbers enter again without space: ");
+                                break;
+                            }
+                        }
+                    } while(!isItAllowed);
+                    }
+                    DES desCipher = new DES(name, key);
+                    tempText = createCipher(list, desCipher, name, tempText, in);
+                    hasEncrypted = true;
                 } else if (encChoice == 6 && !list.isEmpty()) {
                      int choice;
                     do {
@@ -242,9 +277,9 @@ public class Menu {
     }
 
     public static void main(String[] args) {
-
-        Scanner in = new Scanner (System.in);
         CipherList list = new CipherList();
+        list.getFile();
+        Scanner in = new Scanner (System.in);
         System.out.println("Welcome to the Educational Encryption Program.");
         int mainChoice;
         do {
@@ -319,7 +354,34 @@ public class Menu {
                             }
 
                         }
-                        // else if (list.getCipher(choice) instanceof Keyed || list.getCipher(choice) instanceof DES)
+                        else if (list.getCipher(choice) instanceof Keyed) {
+                            System.out.print("Enter the text to be Encrypted: ");
+                            savedCipher.setPlainText(textValidate(in.nextLine(),in));
+                            savedCipher.encrypt();
+                            String tempText = savedCipher.getEncryptedText();
+                            System.out.println(tempText);
+                            encChoice(list, in, true, tempText);
+                        }
+                        else if (list.getCipher(choice) instanceof DES) {
+                            String tempText;
+                            Boolean isItAllowed;
+                            in.nextLine();
+                            System.out.print("Enter the text of 16 hexadecimal numbers (without space) that you want to be encrypted: ");
+                            do {
+                                tempText = in.nextLine();
+                                isItAllowed = true;
+                                for (int i = 0; i < tempText.length(); i++) {
+                                    if ("qwrtyuiopsghjklzxvnm `!@#$%^&*()_+{}\\|;:'\'\",<.>/?".contains("" + tempText.charAt(i)) || tempText.length() != 16) {
+                                    isItAllowed = false;
+                                    System.out.print("please 16 hexadecimal numbers enter again without space: ");
+                                    break;
+                                    }
+                                }
+                            } while(!isItAllowed);
+                            savedCipher.setPlainText(tempText);
+                            savedCipher.encrypt();
+                            encChoice(list, in, true, tempText);
+                        }
                     } else if (saveChoice == 2) {
                         list.remove(choice);
                     }
@@ -336,6 +398,7 @@ public class Menu {
             }
 
         } while (true);
+        list.saveFile();
         in.close();
     }
 }
