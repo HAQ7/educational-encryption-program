@@ -74,7 +74,6 @@ public class CipherList {
             FileInputStream fis = new FileInputStream("encryptList.encl");
             ObjectInputStream ois = new ObjectInputStream(fis);
             try {
-                int i =0;
                 while (true) {
                     Cipher newCipher = (Cipher) ois.readObject();
                     if (newCipher != null)

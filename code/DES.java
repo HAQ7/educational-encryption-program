@@ -485,116 +485,6 @@ public class DES extends Cipher {
         return fp;
     }
 
-    /**
-     * Wrapper around encryptBlock() that allows arguments to be byte
-     * arrays instead of longs.
-     */
-    public static void encryptBlock(
-            byte[] message,
-            int messageOffset,
-            byte[] ciphertext,
-            int ciphertextOffset,
-            byte[] key
-    ) {
-        long m = getLongFromBytes(message, messageOffset);
-        long k = getLongFromBytes(key, 0);
-        long c = encryptBlock(m, k);
-        getBytesFromLong(ciphertext, ciphertextOffset, c);
-    }
-
-    //////////////////////////////////////////////////////////////////////
-    //
-    // High-level interface to the DES algorithm
-    //
-    //////////////////////////////////////////////////////////////////////
-
-    /**
-     * Encrypt the supplied message with the provided key, and return
-     * the ciphertext.  If the message is not a multiple of 64 bits
-     * (8 bytes), then it is padded with zeros.
-     * <p/>
-     * This method uses the Electronic Code Book (ECB) mode of
-     * operation -- each 64-bit block is encrypted individually with
-     * the same key.
-     */
-    public static byte[] encrypt(byte[] message, byte[] key) {
-        byte[] ciphertext = new byte[message.length];
-
-        // encrypt each 8-byte (64-bit) block of the message.
-        for (int i = 0; i < message.length; i += 8) {
-            encryptBlock(message, i, ciphertext, i, key);
-        }
-
-        return ciphertext;
-    }
-
-    /**
-     * Encrypt the supplied message with the provided key, and return
-     * the ciphertext.  If the message is not a multiple of 64 bits
-     * (8 bytes), then it is padded with zeros.
-     * <p/>
-     * This method uses the Electronic Code Book (ECB) mode of
-     * operation -- each 64-bit block is encrypted individually with
-     * the same key.
-     * <p/>
-     * The provided password is converted into a key with the bits
-     * of each byte reversed, to generate a stronger key.
-     * See passwordToKey() for more details.
-     */
-    public static byte[] encrypt(byte[] challenge, String password) {
-        return encrypt(challenge, passwordToKey(password));
-    }
-
-    /**
-     * Convert a password string into a byte array, reversing the bits
-     * of each byte to place more useful key bits into non-discarded
-     * bit-positions of the 64-bit DES key input.  The ever-popular
-     * 7-bit ASCII characters have useful information in the least
-     * significant bit which is discarded by DES, and always have zero
-     * in the most significant bit, so reversing the bit order of the
-     * password bytes results in a stronger key.
-     * <p/>
-     * This is consistent with the "VNC Authentication" scheme used in
-     * the RFB protocol:
-     * <p/>
-     * "The RFB specification says that VNC authentication is done by
-     * receiving a 16 byte challenge, encrypting it with DES using the
-     * user specified password, and sending back the resulting 16 bytes.
-     * The actual software encrypts the challenge with all the bit fields
-     * in each byte of the password mirrored."
-     * - http://www.vidarholen.net/contents/junk/vnc.html
-     */
-    private static byte[] passwordToKey(String password) {
-        byte[] pwbytes = password.getBytes();
-        byte[] key = new byte[8];
-        for (int i = 0; i < 8; i++) {
-            if (i < pwbytes.length) {
-                byte b = pwbytes[i];
-                // flip the byte
-                byte b2 = 0;
-                for (int j = 0; j < 8; j++) {
-                    b2 <<= 1;
-                    b2 |= (b & 0x01);
-                    b >>>= 1;
-                }
-                key[i] = b2;
-            } else {
-                key[i] = 0;
-            }
-        }
-        return key;
-    }
-
-    /* Decrypting is left as an exercise for the reader. ;) */
-
-    //////////////////////////////////////////////////////////////////////
-    //
-    // Test methods
-    //
-    // The rest of the file is devoted to some simple test infrastructure
-    // for providing confidence in this DES implementation.
-    //
-    //////////////////////////////////////////////////////////////////////
 
     private static int charToNibble(char c) {
         if (c >= '0' && c <= '9') {
@@ -628,34 +518,6 @@ public class DES extends Cipher {
         return sb.toString();
     }
 
-    public static boolean test(byte[] message, byte[] expected, String password) {
-        return test(message, expected, passwordToKey(password));
-    }
-
-    private static int testCount = 0;
-
-    public static boolean test(byte[] message, byte[] expected, byte[] key) {
-        System.out.println("Test #" + (++testCount) + ":");
-        System.out.println("\tmessage:  " + hex(message));
-        System.out.println("\tkey:      " + hex(key));
-        System.out.println("\texpected: " + hex(expected));
-        byte[] received = encrypt(message, key);
-        System.out.println("\treceived: " + hex(received));
-        boolean result = Arrays.equals(expected, received);
-        System.out.println("\tverdict: " + (result ? "PASS" : "FAIL"));
-        return result;
-    }
-    public static String convertStringToHex(String str){
-		 
-		char[] chars = str.toCharArray();
-	 
-		StringBuffer hex = new StringBuffer();
-		for(int i = 0; i < chars.length; i++){
-			hex.append(Integer.toHexString((int)chars[i]));
-		}
-	 
-		return hex.toString();
-	 }
 
     public DES(String name, String key) {
         super(name);
@@ -665,6 +527,7 @@ public class DES extends Cipher {
 
     public void encrypt() {
     	String oriText = plainText;
+        //turns 16 hex to 8 bytes
     	byte[] keys = parseBytes(key);
     	byte[] test = parseBytes(oriText);
     	
@@ -675,12 +538,6 @@ public class DES extends Cipher {
     	System.out.println("Encryption result:  " + encryptedText);
     }
 
-    //******************************************************************************************************************
-
-
-    // The parts below were added
-
-    //  Initial Vector
     private static long IV;
 
     public static long getIv() {
@@ -691,20 +548,9 @@ public class DES extends Cipher {
         IV = iv;
     }
 
-
-    // ENCRYPT with CBC ---------------------------------------------------------------------------------------------
-
-    /**
-     * Encrypt the supplied message with the provided key, and return
-     * the ciphertext.  If the message is not a multiple of 64 bits
-     * (8 bytes), then it is padded with zeros.
-     * <p/>
-     * This method uses the Cypher Block Chaining mode (CBC) mode of
-     * operation -- each 64-bit block is XORed with the previous ciphertext
-     * before being encrypted with the same key.
-     */
     public static byte[] encryptCBC(byte[] message, byte[] key) {
         byte[] ciphertext = new byte[message.length];
+        //turns 8 bytes to 64 bit int
         long k = getLongFromBytes(key, 0);
         long previousCipherBlock = IV;
 
