@@ -360,6 +360,12 @@ public class DES extends Cipher {
         return P(dst);
     }
 
+    public static void printArray(byte[] arr) {
+        for(int i =0; i<arr.length; i++)
+            System.out.print(arr[i] + ", ");
+        System.out.println();
+    }
+    
     /**
      * Generate 16 48-bit subkeys based on the provided 64-bit key
      * value.
@@ -368,9 +374,19 @@ public class DES extends Cipher {
         long subkeys[] = new long[16];
 
         // perform the PC1 permutation
+        System.out.println("------------------KEY GENERATION------------------");
+        System.out.println();
+        System.out.println("First we will perform a compression permutation from 64-bit to 56-bit");
+        System.out.print("PC1 = ");
+        printArray(PC1);
+        System.out.println("64-bit key before: " + key + " (this is 64-bit intger)");
         key = PC1(key);
-
+        System.out.println("56-bit key before: " + key);
         // split into 28-bit left and right (c and d) pairs.
+        System.out.println("now we split it into 28-bit pairs.");
+        System.out.println("Then we will perform 16 shifts for each half as follows: 1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1");
+        System.out.println("For each time we shift we will merge it and get a new key");
+        System.out.println("so we will get the follwing keys: ");
         int c = (int) (key >> 28);
         int d = (int) (key & 0x0FFFFFFF);
 
@@ -392,11 +408,16 @@ public class DES extends Cipher {
 
             // join the two keystuff halves together.
             long cd = (c & 0xFFFFFFFFL) << 28 | (d & 0xFFFFFFFFL);
-
+            
+            System.out.println((i + 1) + "-" + cd);
             // perform the PC2 permutation
             subkeys[i] = PC2(cd);
         }
 
+        System.out.println("after that we will perform a compression permutation from 56-bit to 48-bit on each key");
+        System.out.print("PC2 = ");
+        printArray(PC2);
+        System.out.println("-----------------------------------------------------------");
         return subkeys; /* 48-bit values */
     }
 
@@ -407,14 +428,39 @@ public class DES extends Cipher {
     public static long encryptBlock(long m, /* 64 bits */ long key) {
         // generate the 16 subkeys
         long subkeys[] = createSubkeys(key);
-
+        System.out.println("------------------16 ROUND OF FESTIEL BLOCK------------------");
+        System.out.println("before we perform any round we will do an initial permutation..");
+        System.out.print("IP = ");
+        printArray(IP);
+        System.out.println("msg before: " + m + " (64-bit intger)");
         // perform the initial permutation
         long ip = IP(m);
+        System.out.println("msg after: " + ip);
 
         // split the 32-bit value into 16-bit left and right halves.
         int l = (int) (ip >> 32);
         int r = (int) (ip & 0xFFFFFFFFL);
-
+        System.out.println("Now we will split the msg into two halfs, and then the first round of the festiel block will start");
+        System.out.println();
+        System.out.println("------------------FESTIEL BLOCK------------------");
+        System.out.println();
+        System.out.println("now we take the right half and the first key and insert them into the function f");
+        System.out.println("inside the function we will perfrom in order:");
+        System.out.println("1-expansion permutation (from 32-bit to 48-bit)");
+        System.out.println("2-XOR with the key");
+        System.out.println("after that we will split the 48-bit into 8 blocks of 6-bit");
+        System.out.println("each block will perfrom a substitution and will result in 8 blocks of 4-bits (32-bit)");
+        System.out.println("each block will have its own substitution table as follows: ");
+        for (int i = 0; i<8; i++) {
+            System.out.print("S" + i + " = ");
+            printArray(S[i]);
+        }
+        System.out.println();
+        System.out.println("after the substitution we will perform a stright permutation");
+        System.out.println("then we will get the result from the function which we will XOR with the left side of the orignal msg");
+        System.out.println("the result will be stored in the right side, while the orignal right side is stored in the left side");
+        System.out.println("this is the whole festiel block");
+        System.out.println("we will perform this 16 times with corresponding key...");
         // perform 16 rounds
         for (int i = 0; i < 16; i++) {
             int previous_l = l;
@@ -429,7 +475,11 @@ public class DES extends Cipher {
         long rl = (r & 0xFFFFFFFFL) << 32 | (l & 0xFFFFFFFFL);
 
         // apply the final permutation
+        System.out.println("after the 16 round we will perforom a final permutation");
+        System.out.print("FP = ");
         long fp = FP(rl);
+        printArray(FP);
+        System.out.println("after that we will get the final result...");
 
         // return the ciphertext
         return fp;

@@ -1,7 +1,3 @@
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Scanner;
 public class Menu {
     public static String textValidate(String text, Scanner in) {
@@ -184,7 +180,8 @@ public class Menu {
                     tempText = createCipher(list, keyedCipher, name, tempText, in);
                     hasEncrypted = true;
                 } else if (encChoice == 5) {
-                    System.out.println("DES takes a 16 hexadecimal numbers to genarate the keys.");
+                    System.out.println("DES encryption can be summarized in two parts: 1-key generation, 2-16 round of festiel block");
+                    System.out.println("In the key generation, DES takes a 16 hexadecimal numbers to genarate 16 subkeys each is 48-bits long");
                     Boolean isItAllowed;
                     System.out.print("Enter the key of 16 hexadecimal numbers (without space) to start the process: ");
                     String key;
@@ -194,20 +191,20 @@ public class Menu {
                         for (int i = 0; i < key.length(); i++) {
                             if ("qwrtyuiopsghjklzxvnm `!@#$%^&*()_+{}\\|;:'\'\",<.>/?".contains("" + key.charAt(i)) || key.length() != 16) {
                                 isItAllowed = false;
-                                System.out.print("please 16 hexadecimal numbers enter again without space: ");
+                                System.out.print("please enter the 16 hexadecimal numbers again without space: ");
                                 break;
                             }
                         }
                     } while(!isItAllowed);
-                    System.out.print("Enter the text of 16 hexadecimal numbers (without space) that you want to be encrypted: ");
+                    System.out.print("Enter the text of hexadecimal numbers (without space) that you want to be encrypted: ");
                     if (!(tempText.length() > 0)) {
                         do {
                         tempText = in.nextLine();
                         isItAllowed = true;
                         for (int i = 0; i < key.length(); i++) {
-                            if ("qwrtyuiopsghjklzxvnm `!@#$%^&*()_+{}\\|;:'\'\",<.>/?".contains("" + tempText.charAt(i)) || key.length() != 16) {
+                            if ("qwrtyuiopsghjklzxvnm `!@#$%^&*()_+{}\\|;:'\'\",<.>/?".contains("" + tempText.charAt(i))) {
                                 isItAllowed = false;
-                                System.out.print("please 16 hexadecimal numbers enter again without space: ");
+                                System.out.print("please enter the hexadecimal numbers again without space: ");
                                 break;
                             }
                         }
