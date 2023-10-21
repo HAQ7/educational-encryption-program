@@ -351,7 +351,7 @@ public class Menu {
                             String tempText;
                             Boolean isItAllowed;
                             in.nextLine();
-                            System.out.print("Enter an (8 or lower) long word (without space) that you want to be encrypted: ");
+                            System.out.print("make sure you have entered text with a length of 8 or below: ");
                             do {
                                 tempText = in.nextLine();
                                 if (tempText.length() == 8)
