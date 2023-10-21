@@ -31,9 +31,6 @@
  * 3. to Decrypt use DES.decryptCBC(byte[] ciphertext, byte[] key)
  *
  */
-
-import java.math.BigInteger;
-
 /**
  * Super-slow DES implementation for the overly patient.
  * <p/>

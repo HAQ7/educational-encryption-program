@@ -349,7 +349,6 @@ public class Menu {
                         }
                         else if (list.getCipher(choice) instanceof DES) {
                             String tempText;
-                            Boolean isItAllowed;
                             in.nextLine();
                             System.out.print("make sure you have entered text with a length of 8 or below: ");
                             do {
