@@ -32,6 +32,8 @@
  *
  */
 
+import java.math.BigInteger;
+
 /**
  * Super-slow DES implementation for the overly patient.
  * <p/>
@@ -521,11 +523,22 @@ public class DES extends Cipher {
         super(name);
         this.key = key;
     }
+    public static String convertStringToHex(String str){
+		 
+		char[] chars = str.toCharArray();
+	 
+		StringBuffer hex = new StringBuffer();
+		for(int i = 0; i < chars.length; i++){
+			hex.append(Integer.toHexString((int)chars[i]));
+		}
+	 
+		return hex.toString();
+	 }
     
-
     public void encrypt() {
-    	String oriText = plainText;
-        //turns 16 hex to 8 bytes
+    	String oriText = convertStringToHex(plainText);
+        System.out.println(oriText);
+    	String key = convertStringToHex(this.key);
     	byte[] keys = parseBytes(key);
     	byte[] test = parseBytes(oriText);
     	

@@ -182,37 +182,26 @@ public class Menu {
                 } else if (encChoice == 5) {
                     System.out.println("DES encryption can be summarized in two parts: 1-key generation, 2-16 round of festiel block");
                     System.out.println("In the key generation, DES takes a 16 hexadecimal numbers to genarate 16 subkeys each is 48-bits long");
-                    Boolean isItAllowed;
-                    System.out.print("Enter the key of 16 hexadecimal numbers (without space) to start the process: ");
+                    System.out.print("Enter text with a length of 8 or below that will be converted into a hexadecimal number (without space) to start the process: ");
                     String key;
                     do {
                         key = in.nextLine();
-                        isItAllowed = true;
-                        for (int i = 0; i < key.length(); i++) {
-                            if ("qwrtyuiopsghjklzxvnm `!@#$%^&*()_+{}\\|;:'\'\",<.>/?".contains("" + key.charAt(i)) || key.length() != 16) {
-                                isItAllowed = false;
-                                System.out.print("please enter the 16 hexadecimal numbers again without space: ");
-                                break;
-                            }
-                        }
-                    } while(!isItAllowed);
-                    System.out.print("Enter the text of hexadecimal numbers (without space) that you want to be encrypted: ");
+                        if (key.length() < 8)
+                            break;
+                        System.out.print("make sure you have entered text with a length of 8 or below: ");
+                    } while(true);
+                    System.out.print("Enter text with a length of 8 exactly that is to be encrypted: ");
                     if (!(tempText.length() > 0)) {
                         do {
                         tempText = in.nextLine();
-                        isItAllowed = true;
-                        for (int i = 0; i < key.length(); i++) {
-                            if ("qwrtyuiopsghjklzxvnm `!@#$%^&*()_+{}\\|;:'\'\",<.>/?".contains("" + tempText.charAt(i))) {
-                                isItAllowed = false;
-                                System.out.print("please enter the hexadecimal numbers again without space: ");
-                                break;
-                            }
-                        }
-                    } while(!isItAllowed);
+                        if (tempText.length() == 8)
+                            break;
+                        System.out.print("make sure you have entered a word with a length of 8: ");
+                    } while(true);
                     }
                     DES desCipher = new DES(name, key);
                     tempText = createCipher(list, desCipher, name, tempText, in);
-                    hasEncrypted = true;
+                    return;
                 } else if (encChoice == 6 && !list.isEmpty()) {
                      int choice;
                     do {
@@ -235,7 +224,6 @@ public class Menu {
                     tempText = savedCipher.getEncryptedText();
                     System.out.println(tempText);
                     hasEncrypted = true;
-                    
                 }
                 if (hasEncrypted) {
                     do {
@@ -363,18 +351,13 @@ public class Menu {
                             String tempText;
                             Boolean isItAllowed;
                             in.nextLine();
-                            System.out.print("Enter the text of 16 hexadecimal numbers (without space) that you want to be encrypted: ");
+                            System.out.print("Enter an (8 or lower) long word (without space) that you want to be encrypted: ");
                             do {
                                 tempText = in.nextLine();
-                                isItAllowed = true;
-                                for (int i = 0; i < tempText.length(); i++) {
-                                    if ("qwrtyuiopsghjklzxvnm `!@#$%^&*()_+{}\\|;:'\'\",<.>/?".contains("" + tempText.charAt(i)) || tempText.length() != 16) {
-                                    isItAllowed = false;
-                                    System.out.print("please 16 hexadecimal numbers enter again without space: ");
+                                if (tempText.length() == 8)
                                     break;
-                                    }
-                                }
-                            } while(!isItAllowed);
+                                System.out.print("make sure you have entered a word with a length of 8: ");
+                            } while(true);
                             savedCipher.setPlainText(tempText);
                             savedCipher.encrypt();
                             encChoice(list, in, true, tempText);
